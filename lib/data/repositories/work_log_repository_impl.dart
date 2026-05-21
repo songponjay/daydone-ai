@@ -9,7 +9,7 @@ class WorkLogRepositoryImpl implements WorkLogRepository {
   }
 
   @override
-  Future<WorkLog> getById(int id) {
+  Future<WorkLog?> getById(int id) {
     // TODO: implement getById
     throw UnimplementedError();
   }
