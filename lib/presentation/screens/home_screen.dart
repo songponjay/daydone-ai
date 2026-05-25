@@ -44,7 +44,7 @@ class HomeScreen extends ConsumerWidget {
                         icon: const Icon(Icons.delete_outline),
                         onPressed: () => ref
                             .read(workLogNotifierProvider.notifier)
-                            .deleteLog(log.id),
+                            .deleteLog(log.id!),
                       ),
                     ),
                   );
@@ -60,7 +60,8 @@ class HomeScreen extends ConsumerWidget {
 
   void _addMockLog(WidgetRef ref) {
     final log = WorkLog(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      id:null, // ID จะถูกกำหนดโดยฐานข้อมูลเมื่อบันทึก log ใหม่
+      //id: DateTime.now().millisecondsSinceEpoch.toString(),
       date: DateTime.now(),
       content: 'log ใหม่ ${DateTime.now().hour}:${DateTime.now().minute}',
       tags: ['new'],

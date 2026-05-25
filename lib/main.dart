@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'presentation/screens/home_screen.dart';
 
 void main() {
+  // init sqflite สำหรับ Windows/Linux/macOS
+  if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
