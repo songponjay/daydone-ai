@@ -1,3 +1,4 @@
+import 'package:daydone_ai/presentation/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/work_log.dart';
@@ -11,7 +12,18 @@ class HomeScreen extends ConsumerWidget {
     final logsAsync = ref.watch(workLogNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('DayDone AI')),
+      appBar: AppBar(title: const Text('DayDone AI'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.summarize),
+            tooltip: 'AI สรุปงาน',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SummaryScreen()),
+            ),
+          ),
+        ],
+      ),
       body: logsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
