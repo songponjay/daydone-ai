@@ -1,3 +1,4 @@
+import 'package:daydone_ai/presentation/screens/export_screen.dart';
 import 'package:daydone_ai/presentation/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +21,15 @@ class HomeScreen extends ConsumerWidget {
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const SummaryScreen()),
+            ),
+          ),
+          // ✅ เพิ่มปุ่ม Export ต่อท้าย
+          IconButton(
+            icon: const Icon(Icons.download),
+            tooltip: 'Export Excel',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ExportScreen()),
             ),
           ),
         ],
