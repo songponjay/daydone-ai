@@ -1,3 +1,4 @@
+import 'package:daydone_ai/presentation/providers/auth_notifier.dart';
 import 'package:daydone_ai/presentation/screens/export_screen.dart';
 import 'package:daydone_ai/presentation/screens/summary_screen.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,16 @@ class HomeScreen extends ConsumerWidget {
               context,
               MaterialPageRoute(builder: (_) => const ExportScreen()),
             ),
+          ),
+          // ปุ่ม Logout มุมขวาบน
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'ออกจากระบบ',
+            onPressed: () async {
+              await ref.read(authNotifierProvider.notifier).signOut();
+              // GoRouter จะ redirect ไป /login อัตโนมัติ
+              // ไม่ต้อง context.go('/login') เอง!
+            },
           ),
         ],
       ),
