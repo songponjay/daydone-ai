@@ -1,6 +1,8 @@
 import 'package:daydone_ai/presentation/providers/auth_notifier.dart';
+import 'package:daydone_ai/presentation/providers/theme_notifier.dart';
 import 'package:daydone_ai/presentation/screens/export_screen.dart';
 import 'package:daydone_ai/presentation/screens/summary_screen.dart';
+import 'package:daydone_ai/presentation/screens/work_log_form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/work_log.dart';
@@ -16,6 +18,17 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('DayDone AI'),
         actions: [
+          //ปุ่ม toggle theme (dark/light)
+          IconButton(
+            icon: Icon(ref.watch(themeModeNotifierProvider) == ThemeMode.dark
+                ? Icons.light_mode
+                : Icons.dark_mode,
+            ), // เปลี่ยน icon ตาม theme ปัจจุบัน
+
+            tooltip: 'เปลี่ยนธีม',
+            onPressed: () => ref.read(themeModeNotifierProvider.notifier).toggle(),
+          ),
+
           IconButton(
             icon: const Icon(Icons.summarize),
             tooltip: 'AI สรุปงาน',
@@ -79,13 +92,21 @@ class HomeScreen extends ConsumerWidget {
                             .read(workLogNotifierProvider.notifier)
                             .deleteLog(log.id!),
                       ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => WorkLogFormScreen(workLog: log),// Edit mode
+                        ),
+                      ),
                     ),
                   );
                 },
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _addMockLog(ref),
+        //onPressed: () => _addMockLog(ref),
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const WorkLogFormScreen()),
+        ),
         child: const Icon(Icons.add),
       ),
     );

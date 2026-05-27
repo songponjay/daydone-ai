@@ -72,6 +72,20 @@ Future<List<WorkLog>> build() async {
     ref.invalidateSelf();       // โหลด list ใหม่จาก DB (id ถูกต้อง)
   }
 
+  Future<void> saveLog(WorkLog log) async {
+  // set loading ระหว่างบันทึก
+    state = const AsyncValue.loading();
+
+    state = await AsyncValue.guard(() async {
+      // repository.save() ใช้ ConflictAlgorithm.replace
+      // → ถ้ามี id เดิม = UPDATE, ถ้า id null = INSERT
+      await ref.read(workLogRepositoryProvider).save(log);
+
+      // โหลด list ใหม่หลังบันทึก
+      return ref.read(workLogRepositoryProvider).getAll();
+    });
+  }
+
   Future<void> deleteLog(int id) async {
     final repo = ref.read(workLogRepositoryProvider);
     await repo.delete(id);      // ลบจาก SQLite

@@ -1,15 +1,17 @@
 import 'package:daydone_ai/presentation/providers/auth_notifier.dart';
+import 'package:daydone_ai/presentation/providers/theme_notifier.dart';
 import 'package:daydone_ai/presentation/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io';
 import 'presentation/screens/home_screen.dart';
 
-void main() async {
+/*void main() async {
   // init sqflite สำหรับ Windows/Linux/macOS
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
     sqfliteFfiInit();
@@ -19,6 +21,29 @@ void main() async {
   await dotenv.load(fileName: '.env'); // โหลด .env ก่อน runApp
 
   runApp(const ProviderScope(child: MyApp()));
+}*/
+void main () async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+    // init sqflite สำหรับ Windows/Linux/macOS
+    if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+
+    await dotenv.load(fileName: '.env'); // โหลด .env ก่อน runApp
+
+    final prefs = await SharedPreferences.getInstance();
+    
+    runApp(ProviderScope(
+      overrides: [
+        // override sharedPreferencesProvider ด้วย instance จริงที่สร้างจาก SharedPreferences.getInstance()
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MyApp(),
+      )
+    );
+
 }
 
 // ── Router Provider (ใช้ Ref ธรรมดา ไม่ใช่ WidgetRef) ──
@@ -74,10 +99,20 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       routerConfig: router,
       title: 'DayDone AI',
+      // light theme (มีอยู่แล้ว)
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.dark,
+        ),
+      ), // dark theme
+ // ดึง theme mode จาก provider
+      themeMode: ref.watch(themeModeNotifierProvider),
+
     );
   }
 }
