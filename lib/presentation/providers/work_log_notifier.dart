@@ -1,6 +1,8 @@
 import 'package:daydone_ai/data/datasources/work_log_local_datasource.dart';
+import 'package:daydone_ai/data/datasources/work_log_remote_datasource.dart';
 import 'package:daydone_ai/data/repositories/work_log_repository_impl.dart';
 import 'package:daydone_ai/domain/repositories/work_log_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../../domain/entities/work_log.dart';
 
@@ -11,9 +13,15 @@ final workLogLocalDatasourceProvider = Provider<WorkLogLocalDatasource>((ref) {
   return WorkLogLocalDatasource();
 });
 
+final workLogRemoteDatasourceProvider = Provider<WorkLogRemoteDatasource>((ref) {
+  final dio = Dio(BaseOptions(baseUrl: 'https://api.example.com')); // ← กำหนด base URL ของ API
+  return WorkLogRemoteDatasource(dio);
+});
+
 final workLogRepositoryProvider = Provider<WorkLogRepository>((ref) {
-  final datasource = ref.watch(workLogLocalDatasourceProvider);
-  return WorkLogRepositoryImpl(datasource);
+  final local = ref.watch(workLogLocalDatasourceProvider);
+  final remote = ref.watch(workLogRemoteDatasourceProvider); // ← รับ remote datasource ด้วย
+  return WorkLogRepositoryImpl(local, remote); // ← ส่งทั้ง local และ remote ไปที่ repository
 });
 
 @riverpod
