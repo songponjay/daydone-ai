@@ -1,16 +1,31 @@
-# daydone_ai
+# DayDone AI 📋
 
-A new Flutter project.
+แอป Work Log + AI Summary สำหรับบันทึกและสรุปงานประจำวัน
 
-## Getting Started
+## Screenshots
 
-This project is a starting point for a Flutter application.
+| Light Mode | Dark Mode |
+|---|---|
+| ![light](screenshots/light.png) | ![dark](screenshots/dark.png) |
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 📝 บันทึก/แก้ไข Work Log แบบ free-text
+- 🤖 AI สรุปงาน weekly/monthly (Claude + Gemini สลับได้)
+- 📊 Export Excel แบบ dynamic เลือก column เองได้
+- 💾 Offline cache ด้วย SQLite
+- 🌙 Dark / Light mode (จำค่าได้หลัง restart)
+- 🔐 Auth system (Mock → Firebase ready)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| State Management | Riverpod AsyncNotifier |
+| Architecture | Clean Architecture 3 ชั้น |
+| Local DB | SQLite (sqflite) |
+| HTTP Client | Dio + Retry interceptor |
+| AI Integration | Claude API + Gemini API |
+| Export | excel package + share_plus |
+| Auth | GoRouter + MockAuth |
+| Theme | SharedPreferences persist |
